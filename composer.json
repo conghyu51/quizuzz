@@ -4,8 +4,11 @@
     },
     "autoload": {
         "psr-4": {
-            "QuizApp\\": "src/"
-        }
+            "App\\": "app/"
+        },
+        "files": [
+            "helpers.php"
+        ]
     },
     "require": {
         "symfony/dotenv": "^7.2"
