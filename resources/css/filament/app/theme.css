@@ -1,0 +1,11 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+.fi-topbar {
+    @apply bg-white dark:bg-gray-900 ring-1 ring-gray-950/5 dark:ring-white/10 shadow-sm;
+}
+
+.fi-topbar nav{
+    @apply max-w-5xl mx-auto ring-0;
+}
