@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\App\Pages\Auth\Login;
 use App\Filament\App\Pages\Auth\Register;
+use App\View\Components\CreateQuizButton;
 use App\View\Components\LoginButton;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -30,18 +31,24 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->login(Login::class)
+            ->brandName('Quizuzz')
             ->registration(Register::class)
             ->spa()
             ->colors([
                 'primary' => Color::Sky,
             ])
-            ->topNavigation()
             ->font('Be Vietnam Pro')
             ->maxContentWidth(MaxWidth::SixExtraLarge)
             ->renderHook(
                 PanelsRenderHook::TOPBAR_END,
                 static fn(): ?string => !filament()->auth()->check() ?
                     Blade::renderComponent(new LoginButton())
+                    : null,
+            )
+            ->renderHook(
+                PanelsRenderHook::SIDEBAR_NAV_START,
+                static fn(): ?string => filament()->auth()->check() ?
+                    Blade::renderComponent(new CreateQuizButton())
                     : null,
             )
             ->darkMode(false)
