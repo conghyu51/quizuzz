@@ -14,6 +14,8 @@ return new class extends Migration
                 $table->string('username')->unique();
                 $table->string('password');
                 $table->ipAddress();
+                $table->boolean('is_teacher')->default(false);
+                $table->boolean('is_admin')->default(false);
                 $table->rememberToken();
                 $table->timestamp('last_login_at')->nullable();
                 $table->timestamps();
