@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\App\Pages\Auth\Login;
+use App\Filament\App\Pages\Auth\Register;
 use App\View\Components\LoginButton;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,15 +29,15 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('app')
-            ->login()
-            ->registration()
+            ->login(Login::class)
+            ->registration(Register::class)
             ->spa()
             ->colors([
                 'primary' => Color::Sky,
             ])
             ->topNavigation()
             ->font('Be Vietnam Pro')
-            ->maxContentWidth(MaxWidth::FiveExtraLarge)
+            ->maxContentWidth(MaxWidth::SixExtraLarge)
             ->renderHook(
                 PanelsRenderHook::TOPBAR_END,
                 static fn(): ?string => !filament()->auth()->check() ?

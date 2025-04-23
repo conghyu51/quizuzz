@@ -7,5 +7,5 @@
 }
 
 .fi-topbar nav{
-    @apply max-w-5xl mx-auto ring-0;
+    @apply max-w-6xl mx-auto ring-0;
 }
