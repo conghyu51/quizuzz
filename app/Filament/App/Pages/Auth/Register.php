@@ -133,12 +133,6 @@ class Register extends SimplePage
                                 'required' => 'Vui lòng nhập lại mật khẩu',
                                 'same' => 'Mật khẩu nhập lại không khớp.',
                             ]),
-                        Radio::make('is_teacher')
-                            ->label('Bạn là giáo viên?')
-                            ->boolean()
-                            ->default(false)
-                            ->required()
-                            ->inline()
                     ])
                     ->statePath('data'),
             ),
