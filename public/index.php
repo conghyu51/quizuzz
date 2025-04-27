@@ -41,4 +41,6 @@ $router->addRoute('GET', '/dang-ky', [AuthController::class, 'registerPage']);
 $router->addRoute('POST', '/dang-ky', [AuthController::class, 'register']);
 $router->addRoute('GET', '/dang-xuat', [AuthController::class, 'logout']);
 
+$router->addRoute('GET', '/lich-su-choi-quiz', [QuizController::class, 'history']);
+
 $router->handleRequest();

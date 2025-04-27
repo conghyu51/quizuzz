@@ -9,16 +9,20 @@
         <div class="page-wrapper">
             <?php include BASE . '/views/layouts/partials/header.php' ?>
             <div class="page-body">
-                <?php
-                $parsedUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-                $extendContainerClass = ($parsedUri == '/' || $parsedUri == '/thu-vien-cua-toi')
-                    && isset($quizzes) && count($quizzes) <= 0
-                    ? ' my-auto' : '';
-                ?>
-                <div class="container-xl<?= $extendContainerClass ?>">
+                <?php if (isset($hasEmptyView)): ?>
                     <?= $slot ?? null ?>
-                </div>
+                <?php else: ?>
+                    <?php
+                    $parsedUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+                    $extendContainerClass = ($parsedUri == '/' || $parsedUri == '/thu-vien-cua-toi' || $parsedUri == '/lich-su-choi-quiz')
+                        && isset($quizzes) && count($quizzes) <= 0
+                        ? ' my-auto' : '';
+                    ?>
+                    <div class="container-xl<?= $extendContainerClass ?>">
+                        <?= $slot ?? null ?>
+                    </div>
+                <?php endif; ?>
             </div>
             <?php include BASE . '/views/layouts/partials/footer.php' ?>
         </div>

@@ -202,4 +202,23 @@ class QuizController extends BaseController
             'msg' => 'Xóa quiz thành công',
         ]);
     }
+
+    public function history()
+    {
+        global $db;
+
+        $quizAttempts = $db->raw(
+            "SELECT quiz_attempts.*, quizzes.name FROM `quiz_attempts` 
+            JOIN quizzes ON quiz_attempts.quiz_id = quizzes.id 
+            WHERE quiz_attempts.user_id = {$_SESSION['user']['id']}
+            ORDER BY quiz_attempts.started_at DESC"
+        );
+
+        return $this->render('history', [
+            'title' => 'Lịch sử làm quiz',
+            'customAction' => BASE . '/views/components/back-home-button.php',
+            'quizAttempts' => $quizAttempts,
+            'hasEmptyView' => true,
+        ]);
+    }
 }

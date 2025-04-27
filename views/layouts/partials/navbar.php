@@ -2,6 +2,7 @@
 $routes = [
     ['uri' => '/', 'title' => 'Khám phá', 'icon' => 'discovery', 'auth_required' => false],
     ['uri' => '/thu-vien-cua-toi', 'title' => 'Thư viện của tôi', 'icon' => 'library', 'auth_required' => true],
+    ['uri' => '/lich-su-choi-quiz', 'title' => 'Lịch sử làm quiz', 'icon' => 'history', 'auth_required' => true],
 ]
 ?>
 

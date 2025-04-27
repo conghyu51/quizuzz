@@ -258,7 +258,6 @@ class PlayQuizController extends BaseController
 
     public function result(): void
     {
-        // Kiểm tra phiên làm bài
         if (!isset($_SESSION['quiz_attempt'])) {
             header('Location: /');
             exit;
@@ -267,13 +266,10 @@ class PlayQuizController extends BaseController
         $attempt = $_SESSION['quiz_attempt'];
         $attemptId = $attempt['id'];
 
-        // Lấy kết quả từ database
-        $results = $this->getQuizResults($attemptId);
-
-        // Kết thúc phiên làm bài
         $this->finishQuizAttempt($attemptId);
+        $results = $this->getQuizResults($attemptId);
+        unset($_SESSION['quiz_attempt']);
 
-        // Render trang kết quả
         $this->render('play/result', [
             'title' => 'Kết quả',
             'results' => $results,
@@ -314,10 +310,6 @@ class PlayQuizController extends BaseController
     protected function finishQuizAttempt($attemptId): void
     {
         global $db;
-
-        if (!is_null($db->get('quiz_attempts', "id = '$attemptId'")['completed_at'])) {
-            return;
-        }
 
         $db->update('quiz_attempts', [
             'completed_at' => date('Y-m-d H:i:s'),
