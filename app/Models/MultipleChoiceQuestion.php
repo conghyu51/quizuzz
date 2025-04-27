@@ -21,7 +21,7 @@ class MultipleChoiceQuestion extends Question
             }
 
             $db->create('options', [
-                'question_id' => $this->id,
+                'question_id' => $this->getId(),
                 'content' => $answer['content'],
                 'is_correct' => intval($answer['is_correct']) ?? 0,
             ]);

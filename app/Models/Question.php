@@ -10,6 +10,13 @@ abstract class Question
     protected int $quiz_id;
     protected int $points = 1;
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -38,22 +45,47 @@ abstract class Question
         return $this;
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getQuizId(): int
+    {
+        return $this->quiz_id;
+    }
+
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
     public function save(): bool
     {
         global $db;
 
         // tạo record mới
         $result = $db->create('questions', [
-            'content' => $this->content,
-            'type' => $this->type,
-            'quiz_id' => $this->quiz_id,
-            'points' => $this->points,
+            'content' => $this->getContent(),
+            'type' => $this->getType(),
+            'quiz_id' => $this->getQuizId(),
+            'points' => $this->getPoints(),
         ]);
 
         if ($result) {
-            $this->id = $db->raw("SELECT LAST_INSERT_ID()")->fetch_row()[0];
+            $this->setId($db->raw("SELECT LAST_INSERT_ID()")->fetch_row()[0]);
 
-            return $this->id;
+            return $this->getId();
         }
 
         return false;
