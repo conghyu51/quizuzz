@@ -1,8 +1,9 @@
 <?php
 
 use App\Controllers\AuthController;
-use App\Controllers\HomeController;
+use App\Controllers\DiscoveryController;
 use App\Controllers\MyLibrary;
+use App\Controllers\PlayQuizController;
 use App\Controllers\QuizController;
 use App\Core\Database;
 use App\Core\Router;
@@ -15,10 +16,18 @@ define('BASE', dirname(__DIR__));
 require_once BASE . '/vendor/autoload.php';
 
 $router = new Router;
+// Kết nối db
 $db = new Database('127.0.0.1', 'root', '', 'quizapp');
 
-$router->addRoute('GET', '/', [HomeController::class, 'index']);
+// Load routes
+$router->addRoute('GET', '/', [DiscoveryController::class, 'index']);
 $router->addRoute('GET', '/thu-vien-cua-toi', [MyLibrary::class, 'index']);
+
+$router->addRoute('GET', '/choi', [PlayQuizController::class, 'index']);
+$router->addRoute('POST', '/choi/bat-dau', [PlayQuizController::class, 'start']);
+$router->addRoute('GET', '/choi/cau-hoi', [PlayQuizController::class, 'question']);
+$router->addRoute('POST', '/choi/gui-dap-an', [PlayQuizController::class, 'submitAnswer']);
+$router->addRoute('GET', '/choi/ket-qua', [PlayQuizController::class, 'result']);
 
 $router->addRoute('POST', '/tao-quiz-moi', [QuizController::class, 'createNewQuiz']);
 $router->addRoute('POST', '/luu-quiz', [QuizController::class, 'saveQuiz']);

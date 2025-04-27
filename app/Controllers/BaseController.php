@@ -22,6 +22,14 @@ abstract class BaseController
         include BASE . "/views/layouts/$layout.php";
     }
 
+    protected function checkAuth(): void
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: /dang-nhap');
+            exit;
+        }
+    }
+
     protected function responseJson(array $data): never
     {
         header('Content-Type: application/json');

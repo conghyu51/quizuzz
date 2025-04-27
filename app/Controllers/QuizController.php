@@ -15,6 +15,7 @@ class QuizController extends BaseController
         $durationMinutes = $_POST['durationMinutes'] ?? null;
         $isPublic = $_POST['isPublic'] ?? null;
 
+        // validate input
         if (!v::stringType()->notEmpty()->validate($quizName)) {
             return $this->responseJson([
                 'ok' => false,
@@ -45,6 +46,7 @@ class QuizController extends BaseController
 
         $slug = $this->generateSlug($quizName);
 
+        // nếu mà trùng slug thì thêm thời gian (timestamp) vào cuối
         if ($db->get('quizzes', "`slug` = '$slug'")) {
             $slug = $slug . '-' . time();
         }
@@ -74,6 +76,7 @@ class QuizController extends BaseController
         $durationMinutes = $_POST['durationMinutes'] ?? null;
         $isPublic = $_POST['isPublic'] ?? null;
 
+        // validate input
         if (!v::stringType()->notEmpty()->validate($quizName)) {
             return $this->responseJson([
                 'ok' => false,
@@ -104,6 +107,7 @@ class QuizController extends BaseController
 
         $slug = $this->generateSlug($quizName);
 
+        // nếu mà trùng slug với các quiz khác thì thêm thời gian (timestamp) vào cuối
         if ($db->get('quizzes', "`slug` = '$slug' AND `id` != '{$_GET['quizId']}'")) {
             $slug = $slug . '-' . time();
         }
@@ -129,6 +133,7 @@ class QuizController extends BaseController
 
     protected function generateSlug(string $title): string
     {
+        // replace ký tự tiếng việt -> ký tự tiếng anh
         $title = preg_replace([
             '/[àáạảãâầấậẩẫăằắặẳẵ]/u',
             '/[èéẹẻẽêềếệểễ]/u',

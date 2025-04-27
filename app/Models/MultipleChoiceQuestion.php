@@ -9,7 +9,7 @@ class MultipleChoiceQuestion extends Question
         $this->setType('multiple_choice');
     }
 
-    public function saveAnswers(array $answers)
+    public function saveAnswers(array $answers): void
     {
         global $db;
 
@@ -20,13 +20,11 @@ class MultipleChoiceQuestion extends Question
                 $correctExists = true;
             }
 
-            $data = [
+            $db->create('options', [
                 'question_id' => $this->id,
                 'content' => $answer['content'],
                 'is_correct' => intval($answer['is_correct']) ?? 0,
-            ];
-
-            $db->create('options', $data);
+            ]);
         }
 
         if (!$correctExists) {

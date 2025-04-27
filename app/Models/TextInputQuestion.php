@@ -13,13 +13,9 @@ class TextInputQuestion extends Question
     {
         global $db;
 
-        $answer = $answers['content'];
-
-        $data = [
+        $db->create('text_answers', [
             'question_id' => $this->id,
-            'content' => $answer,
-        ];
-
-        $db->create('text_answers', $data);
+            'content' => $answers['content'],
+        ]);
     }
 }

@@ -33,8 +33,8 @@
                     <div class="mb-3">
                         <label class="form-label required" for="isPublic">Công khai?</label>
                         <select class="form-select" name="isPublic" id="isPublic">
-                            <option value="true" selected>Có</option>
-                            <option value="false">Không</option>
+                            <option value="true">Có</option>
+                            <option value="false" selected>Không</option>
                         </select>
                     </div>
                 </form>

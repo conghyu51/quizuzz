@@ -23,7 +23,7 @@
             <?php include BASE . '/views/layouts/partials/footer.php' ?>
         </div>
     </div>
-    <?php if (isset($_GET['quiz']) && $_GET['action'] == 'edit' && parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/thu-vien-cua-toi'): ?>
+    <?php if (isset($_GET['quiz']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/thu-vien-cua-toi'): ?>
         <?php include BASE . '/views/components/modal-add-new-question.php' ?>
     <?php else: ?>
         <?php include BASE . '/views/components/modal-create-new-quiz.php' ?>

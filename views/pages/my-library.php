@@ -2,7 +2,7 @@
     <div class="row row-cards">
         <?php foreach ($quizzes as $quiz): ?>
             <div class="col-sm-6 col-lg-4">
-                <a href="?quiz=<?= e($quiz['slug']) ?>&action=edit" class="card card-sm">
+                <a href="?quiz=<?= e($quiz['slug']) ?>" class="card card-sm">
                     <div class="d-block position-relative">
                         <img src="<?= e($quiz['image']) ?>" class="card-img-top" alt="<?= e($quiz['name']) ?>" style="height: 280px; width: 100%; object-fit: cover;">
                         <div class="position-absolute" style="top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 7px;">

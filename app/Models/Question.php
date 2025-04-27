@@ -5,28 +5,14 @@ namespace App\Models;
 abstract class Question
 {
     protected int $id;
-    protected int $quiz_id;
     protected string $content;
     protected string $type;
+    protected int $quiz_id;
     protected int $points = 1;
-
-    public function setQuizId(int $quiz_id): self
-    {
-        $this->quiz_id = $quiz_id;
-
-        return $this;
-    }
 
     public function setContent(string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function setPoint(int $point): self
-    {
-        $this->points = $point;
 
         return $this;
     }
@@ -38,23 +24,31 @@ abstract class Question
         return $this;
     }
 
-    public function getType()
+    public function setQuizId(int $quiz_id): self
     {
-        return $this->type;
+        $this->quiz_id = $quiz_id;
+
+        return $this;
+    }
+
+    public function setPoints(int $points): self
+    {
+        $this->points = $points;
+
+        return $this;
     }
 
     public function save(): bool
     {
         global $db;
 
-        $data = [
-            'quiz_id' => $this->quiz_id,
+        // tạo record mới
+        $result = $db->create('questions', [
             'content' => $this->content,
             'type' => $this->type,
+            'quiz_id' => $this->quiz_id,
             'points' => $this->points,
-        ];
-
-        $result = $db->create('questions', $data);
+        ]);
 
         if ($result) {
             $this->id = $db->raw("SELECT LAST_INSERT_ID()")->fetch_row()[0];

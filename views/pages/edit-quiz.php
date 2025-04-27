@@ -117,12 +117,12 @@
                             </button>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body pt-2">
                         <?php
                         $answersCount = count($question['answers']);
                         for ($i = 0; $i < $answersCount; $i += 2):
                         ?>
-                            <div class="row mb-2">
+                            <div class="row mt-2">
                                 <div class="d-flex align-items-center col">
                                     <span class="avatar avatar-sm <?= $question['answers'][$i]['is_correct'] ? 'bg-green-lt' : 'bg-red-lt' ?>">
                                         <?= chr(65 + $i) ?>

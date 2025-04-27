@@ -9,23 +9,25 @@ class MyLibrary extends BaseController
 {
     public function index(): void
     {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /dang-nhap');
-            exit;
-        }
+        $this->checkAuth();
 
         global $db;
 
-        if (isset($_GET['quiz']) && $_GET['action'] == 'edit') {
-            $quiz = $this->getQuizBySlug($_GET['quiz']);
+        if (isset($_GET['quiz'])) { // nếu có query string quiz thì sẽ render trang chỉnh sửa quiz
+            $quizDetails = $this->getQuizBySlug($_GET['quiz']);
+
+            if (is_null($quizDetails)) {
+                header('Location: /404');
+                exit;
+            }
 
             $this->render('edit-quiz', [
-                'title' => $quiz['name'],
-                'quiz' => $quiz,
-                'heading' => $quiz['name'],
+                'title' => $quizDetails['name'],
+                'quiz' => $quizDetails,
+                'heading' => $quizDetails['name'],
             ]);
-        } else {
-            $quizzes = $db->getMany('quizzes', "`user_id` = {$_SESSION['user']['id']} ORDER BY `created_at` DESC");
+        } else { // không có thì render trang quản lý quiz
+            $quizzes = $db->getMany('quizzes', "`user_id` = {$_SESSION['user']['id']} ORDER BY `created_at` DESC"); // sắp xếp theo tạo mới nhất
 
             $this->render('my-library', [
                 'title' => 'Thư viện của tôi',
@@ -41,6 +43,10 @@ class MyLibrary extends BaseController
 
         $slug = $db->conn->real_escape_string($slug);
 
+        // Lấy quiz, question và đáp án
+        // - questions: lấy tất cả câu hỏi thuộc quiz
+        // - options: lấy các đáp án cho câu hỏi có type = multiple_choice
+        // - text_answers: lấy đáp án cho câu hỏi có type = text_input
         $sql = "
         SELECT 
             q.*, 
@@ -75,6 +81,7 @@ class MyLibrary extends BaseController
         $quiz = null;
         $questions = [];
 
+        // xử lý result thành dạng quiz[questions[]]
         while ($row = $result->fetch_assoc()) {
             if ($quiz === null) {
                 $quiz = [
@@ -90,6 +97,7 @@ class MyLibrary extends BaseController
                 ];
             }
 
+            // thêm question vào mảng questions nếu chưa tồn tại
             $questionId = $row['question_id'];
             if ($questionId && !isset($questions[$questionId])) {
                 $questions[$questionId] = [
@@ -101,6 +109,7 @@ class MyLibrary extends BaseController
                 ];
             }
 
+            // thêm đáp án cho question tương ứng dựa vào type
             if ($questionId) {
                 if ($row['question_type'] == 'multiple_choice' && $row['option_id']) {
                     $questions[$questionId]['answers'][] = [
@@ -117,6 +126,7 @@ class MyLibrary extends BaseController
             }
         }
 
+        // chuyển từ key-value sang mảng tuần tự rồi reverse questions[] để hiện question mới ở cuối
         $quiz['questions'] = array_reverse(array_values($questions));
 
         return $quiz;
@@ -124,13 +134,14 @@ class MyLibrary extends BaseController
 
     public function addNewQuestion()
     {
+        // lấy input từ request
         $input = json_decode(file_get_contents('php://input'), true);
 
         $content = $input['content'] ?? '';
         $type = $input['questionType'] ?? '';
         $quizId = $input['quizId'] ?? '';
         $points = $input['points'] ?? 1;
-        $options = $input['options'] ?? $input['answer'] ?? [];
+        $answers = $input['options'] ?? $input['answer'] ?? [];
 
         if (!in_array($type, ['multipleChoice', 'textInput'])) {
             return $this->responseJson([
@@ -139,14 +150,16 @@ class MyLibrary extends BaseController
             ]);
         }
 
-        $question = $type === 'multipleChoice' ? new MultipleChoiceQuestion() : new TextInputQuestion();
+        $question = $type === 'multipleChoice'
+            ? new MultipleChoiceQuestion()
+            : new TextInputQuestion();
 
         $question->setContent($content)
             ->setQuizId($quizId)
-            ->setPoint($points)
+            ->setPoints($points)
             ->save();
 
-        $question->saveAnswers($options);
+        $question->saveAnswers($answers);
 
         return $this->responseJson([
             'ok' => true,
